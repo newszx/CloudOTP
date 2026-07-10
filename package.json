@@ -1,0 +1,32 @@
+{
+  "name": "cloudotp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Workers + D1 edition of TOTP Share Dashboard",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler d1 migrations apply DB --local --config wrangler.local.jsonc && wrangler dev --config wrangler.local.jsonc",
+    "test": "node --test tests/*.test.js",
+    "deploy": "wrangler d1 migrations apply DB --remote && wrangler deploy",
+    "db:migrations:apply": "wrangler d1 migrations apply DB --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^4.68.0"
+  },
+  "cloudflare": {
+    "bindings": {
+      "DB": {
+        "description": "D1 database used for members, encrypted TOTP secrets, categories, and access logs."
+      },
+      "ADMIN_PASSWORD": {
+        "description": "Initial administrator password. Use at least 12 random characters."
+      },
+      "SESSION_SECRET": {
+        "description": "Random session-signing key. Generate one with `openssl rand -hex 32`."
+      },
+      "APP_ENCRYPTION_KEY": {
+        "description": "Random encryption key for TOTP secrets. Generate one with `openssl rand -hex 32` and keep a backup; changing it makes saved secrets unreadable."
+      }
+    }
+  }
+}
