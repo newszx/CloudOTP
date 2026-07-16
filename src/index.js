@@ -11,6 +11,8 @@ import {
 
 const COOKIE = "cloudotp_admin";
 const COLORS = new Set(["green", "blue", "orange", "purple", "gray"]);
+const WECHAT_VERIFY_FILE = "2dd8747fa206933cf282c0043f24d53a.txt";
+const WECHAT_VERIFY_CONTENT = "78d2a5a790cd054481367789a5de711074813c63";
 
 function esc(value = "") {
   return String(value)
@@ -374,6 +376,7 @@ async function handle(request, env) {
   if (method === "GET" && path === "/favicon.svg") return asset(APP_ICON_SVG, "image/svg+xml; charset=utf-8");
   if (method === "GET" && path === "/apple-touch-icon.svg") return asset(APP_ICON_SVG, "image/svg+xml; charset=utf-8");
   if (method === "GET" && path === "/site.webmanifest") return asset(JSON.stringify({ name: "2FA 管理", short_name: "CloudOTP", description: "CloudOTP TOTP 管理看板", start_url: "/login", scope: "/", display: "standalone", background_color: "#f9fafb", theme_color: "#7c5cff", icons: [{ src: "/favicon.svg", sizes: "any", type: "image/svg+xml", purpose: "any maskable" }] }), "application/manifest+json; charset=utf-8");
+  if (method === "GET" && path === `/${WECHAT_VERIFY_FILE}`) return response(`${WECHAT_VERIFY_CONTENT}\n`, 200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=300" });
   validateEnv(env);
   const secureCookie = url.protocol === "https:" ? "; Secure" : "";
   if (path === "/health") return json({ status: "ok", runtime: "cloudflare-workers", database: "d1" });
